@@ -13,19 +13,20 @@
   <style>
     :root{
       --bg: #0b0b0f;
-      --panel: #11121a;
-      --panel2: #141627;
-      --border: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.10);
       --text: rgba(255,255,255,.92);
       --sub: rgba(255,255,255,.65);
       --muted: rgba(255,255,255,.45);
 
       --orange: #ff7a18;
       --orange2:#ff9a3c;
+
       --danger:#ff3b3b;
       --ok:#22c55e;
 
+      --ink: #120b02;
       --radius: 18px;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
     }
 
     *{ box-sizing:border-box; }
@@ -44,7 +45,7 @@
     .app{
       max-width: 560px;
       margin: 0 auto;
-      padding: 14px 0 22px;
+      padding: 14px 0 96px; /* 留給底部 mini player */
     }
 
     .topbar{
@@ -60,18 +61,9 @@
       z-index: 5;
     }
 
-    .brand{
-      display:flex; flex-direction:column; gap:3px;
-    }
-    .brand .title{
-      font-size: 16px;
-      letter-spacing: .2px;
-      font-weight: 800;
-    }
-    .brand .desc{
-      font-size: 12px;
-      color: var(--sub);
-    }
+    .brand{ display:flex; flex-direction:column; gap:3px; }
+    .brand .title{ font-size: 16px; letter-spacing: .2px; font-weight: 900; }
+    .brand .desc{ font-size: 12px; color: var(--sub); }
 
     .pill{
       font-size:12px;
@@ -89,14 +81,13 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 14px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+      box-shadow: var(--shadow);
     }
-
     .stack{ display:flex; flex-direction:column; gap:12px; }
 
     .section-title{
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       color: rgba(255,255,255,.85);
       margin: 2px 0 8px;
       display:flex; align-items:center; gap:8px;
@@ -110,17 +101,10 @@
     .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     @media (max-width:380px){ .grid2{ grid-template-columns: 1fr; } }
 
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    .label{
-      font-size: 12px;
-      color: var(--sub);
-    }
+    .field{ display:flex; flex-direction:column; gap:6px; }
+    .label{ font-size: 12px; color: var(--sub); }
 
-    input, select{
+    input{
       width:100%;
       padding: 12px 12px;
       border-radius: 14px;
@@ -131,9 +115,55 @@
       font-size: 14px;
     }
     input::placeholder{ color: rgba(255,255,255,.35); }
-    input:focus, select:focus{
+    input:focus{
       border-color: rgba(255,122,24,.6);
       box-shadow: 0 0 0 4px rgba(255,122,24,.12);
+    }
+
+    /* Hide number spinners */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+    input[type="number"]{ -moz-appearance: textfield; }
+
+    /* Pretty Select */
+    .select-wrap{ position: relative; width: 100%; }
+    .select-wrap select{
+      width:100%;
+      padding: 12px 44px 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline:none;
+      font-size: 14px;
+      appearance:none;
+      -webkit-appearance:none;
+      cursor:pointer;
+    }
+    .select-wrap select:focus{
+      border-color: rgba(255,122,24,.6);
+      box-shadow: 0 0 0 4px rgba(255,122,24,.12);
+    }
+    .select-wrap::after{
+      content: "▾";
+      position:absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,.75);
+      font-size: 14px;
+      pointer-events:none;
+    }
+    .select-wrap::before{
+      content:"";
+      position:absolute;
+      right: 38px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 22px;
+      background: rgba(255,255,255,.12);
+      pointer-events:none;
     }
 
     .seg{
@@ -152,7 +182,7 @@
       background: transparent;
       color: var(--sub);
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       cursor:pointer;
     }
     .seg button.active{
@@ -167,24 +197,28 @@
       padding: 12px 12px;
       border-radius: 14px;
       border: 1px solid transparent;
-      font-weight: 900;
+      font-weight: 950;
       font-size: 14px;
       cursor:pointer;
       user-select:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
     }
     .btn.primary{
       background: linear-gradient(180deg, var(--orange), var(--orange2));
-      color: #120b02;
+      color: var(--ink);
       box-shadow: 0 10px 22px rgba(255,122,24,.18);
     }
     .btn.secondary{
       background: rgba(255,255,255,.06);
       border-color: var(--border);
-      color: rgba(255,255,255,.9);
+      color: rgba(255,255,255,.92);
     }
     .btn.danger{
-      background: rgba(255,59,59,.10);
-      border-color: rgba(255,59,59,.35);
+      background: rgba(255,59,59,.12);
+      border-color: rgba(255,59,59,.40);
       color: rgba(255,255,255,.92);
     }
     .btn.ok{
@@ -193,21 +227,13 @@
       color: rgba(255,255,255,.92);
     }
 
-    .sound-row{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-    }
-    .sound-row .btn{ flex: 0 0 auto; }
     .mini{
       font-size: 12px;
       color: var(--muted);
       line-height: 1.45;
     }
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    .list{ display:flex; flex-direction:column; gap:10px; }
 
     .timer{
       background: linear-gradient(180deg, rgba(17,18,26,.95), rgba(20,22,39,.85));
@@ -216,8 +242,51 @@
       padding: 12px;
     }
     .timer.active{
-      border-color: rgba(255,122,24,.55);
+      border-color: rgba(255,122,24,.45);
       box-shadow: 0 0 0 4px rgba(255,122,24,.10);
+    }
+
+    /* Running highlight */
+    .timer.running{
+      background: linear-gradient(180deg, rgba(255,122,24,.98), rgba(255,154,60,.92));
+      border-color: rgba(255,122,24,.95);
+      box-shadow: 0 0 0 4px rgba(255,122,24,.20);
+    }
+    .timer.running .tmeta,
+    .timer.running .status{ color: rgba(18,11,2,.78); }
+    .timer.running .badge{
+      color: rgba(18,11,2,.85);
+      background: rgba(255,255,255,.22);
+      border-color: rgba(18,11,2,.18);
+    }
+    .timer.running .tname-input{
+      color: rgba(18,11,2,.95);
+      background: rgba(255,255,255,.24);
+      border-color: rgba(18,11,2,.18);
+    }
+    .timer.running .time{
+      color: rgba(18,11,2,.98);
+      text-shadow: 0 1px 0 rgba(255,255,255,.12);
+    }
+
+    /* Running buttons obvious */
+    .timer.running .btn.secondary{
+      background: rgba(18,11,2,.88);
+      border-color: rgba(18,11,2,.88);
+      color: rgba(255,255,255,.95);
+      box-shadow: 0 8px 18px rgba(18,11,2,.20);
+    }
+    .timer.running .btn.danger{
+      background: rgba(255,59,59,.85);
+      border-color: rgba(255,59,59,.95);
+      color: rgba(255,255,255,.98);
+      box-shadow: 0 10px 22px rgba(255,59,59,.18);
+    }
+    .timer.running .btn.primary{
+      background: rgba(18,11,2,.92);
+      color: rgba(255,255,255,.96);
+      border-color: rgba(255,255,255,.12);
+      box-shadow: 0 10px 22px rgba(18,11,2,.20);
     }
 
     .timer-head{
@@ -226,24 +295,9 @@
       gap:10px;
       align-items:flex-start;
     }
-
-    .tname-wrap{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .tname-line{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      min-width: 0;
-    }
-
+    .tname-wrap{ display:flex; flex-direction:column; gap:6px; flex: 1; min-width: 0; }
     .tname-input{
-      font-weight: 950;
+      font-weight: 1000;
       letter-spacing:.2px;
       font-size: 15px;
       background: rgba(255,255,255,.04);
@@ -252,13 +306,7 @@
       padding: 8px 10px;
       width: 100%;
     }
-
-    .tmeta{
-      color: var(--sub);
-      font-size: 12px;
-      line-height: 1.35;
-    }
-
+    .tmeta{ color: var(--sub); font-size: 12px; line-height: 1.35; }
     .badge{
       font-size: 11px;
       padding: 6px 9px;
@@ -278,7 +326,7 @@
     }
     .time{
       font-variant-numeric: tabular-nums;
-      font-weight: 950;
+      font-weight: 1000;
       font-size: 28px;
       letter-spacing:.6px;
     }
@@ -293,14 +341,28 @@
       display:flex;
       gap:8px;
       margin-top: 10px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
     .actions .btn{
       padding: 10px 10px;
       font-size: 13px;
       border-radius: 12px;
-      flex: 1 1 120px;
+      flex: 1;
+      min-width: 0;
     }
+
+    .host-row{
+      margin-top: 10px;
+      display:flex;
+      gap:10px;
+    }
+    .host-row .btn{
+      padding: 12px 12px;
+      border-radius: 14px;
+      font-size: 14px;
+    }
+    .host-row .btn.primary{ flex: 2; }
+    .host-row .btn.secondary{ flex: 1; }
 
     .reorder{
       display:flex;
@@ -322,7 +384,6 @@
       border-radius: 18px;
       background: rgba(255,255,255,.03);
     }
-
     .footerhint{
       margin-top: 10px;
       font-size: 12px;
@@ -331,14 +392,47 @@
       padding: 0 8px;
     }
 
-    /* Fullscreen overlay (fallback + iOS) */
+    /* Pretty file upload */
+    .file-wrap{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.25);
+    }
+    .file-wrap .file-btn{
+      flex: 0 0 auto;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,122,24,.45);
+      background: linear-gradient(180deg, rgba(255,122,24,.16), rgba(255,122,24,.08));
+      color: rgba(255,255,255,.94);
+      font-weight: 900;
+      font-size: 13px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .file-wrap .file-name{
+      font-size: 13px;
+      color: var(--sub);
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+    }
+    .file-wrap input[type="file"]{ display:none; }
+
+    /* Fullscreen overlay */
     .overlay{
       position: fixed;
       inset: 0;
       background: radial-gradient(900px 600px at 10% 0%, rgba(255,122,24,.22), transparent 55%),
                   radial-gradient(900px 600px at 110% 10%, rgba(255,154,60,.10), transparent 55%),
                   var(--bg);
-      z-index: 9999;
+      z-index: 9990;
       display: none;
       padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
     }
@@ -360,16 +454,8 @@
       gap:10px;
       padding-top: 6px;
     }
-    .fs-title{
-      font-weight: 950;
-      font-size: 16px;
-      letter-spacing: .2px;
-    }
-    .fs-sub{
-      font-size: 12px;
-      color: var(--sub);
-      margin-top: 4px;
-    }
+    .fs-title{ font-weight: 1000; font-size: 16px; letter-spacing: .2px; }
+    .fs-sub{ font-size: 12px; color: var(--sub); margin-top: 4px; }
 
     .fs-time{
       font-variant-numeric: tabular-nums;
@@ -398,33 +484,127 @@
       border-radius: 16px;
       font-size: 14px;
     }
-    .fs-snooze{
+
+    /* Bottom Sheet */
+    .sheet-backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 9998;
+      display:none;
+    }
+    .sheet-backdrop.show{ display:block; }
+
+    .sheet{
+      position: fixed;
+      left:0; right:0;
+      bottom:0;
+      z-index: 9999;
+      transform: translateY(110%);
+      transition: transform .22s ease;
+      padding: 0 12px env(safe-area-inset-bottom) 12px;
+    }
+    .sheet.show{ transform: translateY(0%); }
+    .sheet-card{
+      max-width: 680px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(17,18,26,.98), rgba(20,22,39,.95));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .sheet-handle{
+      height: 22px;
       display:flex;
-      gap:10px;
-      flex-wrap: wrap;
-      margin-top: 10px;
+      align-items:center;
+      justify-content:center;
     }
-    .fs-snooze .btn{
-      flex: 1 1 100px;
-      padding: 12px 10px;
+    .sheet-handle::before{
+      content:"";
+      width: 44px;
+      height: 4px;
+      border-radius: 99px;
+      background: rgba(255,255,255,.20);
+    }
+    .sheet-body{ padding: 6px 14px 14px; }
+    .sheet-title{ font-weight: 1000; font-size: 15px; margin-bottom: 4px; }
+    .sheet-desc{ font-size: 12px; color: var(--sub); margin-bottom: 12px; line-height: 1.4; }
+    .sheet-actions{ display:flex; gap:10px; flex-wrap: wrap; }
+    .sheet-actions .btn{
+      flex: 1 1 120px;
       border-radius: 16px;
+      padding: 13px 12px;
+    }
+
+    /* Mini player (Spotify-style) */
+    .mini-player{
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      z-index: 9000;
+      display:none;
+    }
+    .mini-player.show{ display:block; }
+    .mini-player-card{
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,122,24,.35);
+      background: linear-gradient(180deg, rgba(255,122,24,.22), rgba(17,18,26,.92));
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .mp-left{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      min-width: 0;
+      flex: 1;
+    }
+    .mp-title{
+      font-weight: 1000;
       font-size: 14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
-
-    .drag-hint{
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
-      line-height: 1.35;
+    .mp-time{
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
     }
-
-    /* draggable */
-    .timer[draggable="true"]{
-      cursor: grab;
+    .mp-actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex: 0 0 auto;
     }
-    .timer.dragging{
-      opacity: .6;
-      border-color: rgba(255,122,24,.6);
+    .icon-btn{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.28);
+      color: rgba(255,255,255,.95);
+      font-weight: 1000;
+      font-size: 18px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+    }
+    .icon-btn:active{ transform: translateY(1px); }
+    .icon-btn.primary{
+      background: rgba(0,0,0,.42);
+      border-color: rgba(255,255,255,.22);
     }
   </style>
 </head>
@@ -433,28 +613,29 @@
   <div class="app">
     <div class="topbar">
       <div class="brand">
-        <div class="title">Meeting Timer</div>
-        <div class="desc">黑橘 PWA · 多段計時 · 主持人模式</div>
+        <div class="title">倒數計時器</div>
+        <div class="desc">你的時間控制小幫手</div>
       </div>
-      <div class="pill" id="pwaHint">PWA 可安裝</div>
+      <div class="pill" id="pwaHint">輕鬆使用</div>
     </div>
 
     <div class="stack">
-      <!-- 全局控制 -->
+      <!-- Quick controls -->
       <div class="card">
         <div class="section-title"><span class="dot"></span>快速控制</div>
         <div class="btnrow">
+          <button class="btn secondary" id="btnStartPause" type="button">開始 / 暫停</button>
           <button class="btn secondary" id="btnNext" type="button">下一段</button>
           <button class="btn secondary" id="btnFullscreen" type="button">全螢幕</button>
         </div>
         <div class="mini" style="margin-top:8px;">
-          「下一段」會依照目前排序，先暫停正在跑的段落，再啟動下一個段落。
+          開始 / 暫停會優先控制正在倒數中的計時器；沒有時就控制目前選取段落。
         </div>
       </div>
 
-      <!-- 新增計時器 -->
+      <!-- Add timer -->
       <div class="card">
-        <div class="section-title"><span class="dot"></span>新增計時段</div>
+        <div class="section-title"><span class="dot"></span>新增計時器</div>
 
         <div class="field">
           <div class="label">名稱</div>
@@ -472,7 +653,7 @@
         <div class="grid2" style="margin-top:10px;">
           <div class="field" id="countdownField">
             <div class="label">倒數分鐘</div>
-            <input id="minutes" type="number" min="1" value="10" />
+            <input id="minutes" type="number" inputmode="numeric" min="1" value="10" />
           </div>
 
           <div class="field" id="endtimeField" style="display:none;">
@@ -482,17 +663,19 @@
 
           <div class="field">
             <div class="label">提前提醒</div>
-            <select id="prealert">
-              <option value="0">不需提前提醒</option>
-              <option value="5">提前 5 分鐘</option>
-              <option value="10">提前 10 分鐘</option>
-              <option value="15">提前 15 分鐘</option>
-            </select>
+            <div class="select-wrap">
+              <select id="prealert">
+                <option value="0">不需提前提醒</option>
+                <option value="5">提前 5 分鐘</option>
+                <option value="10">提前 10 分鐘</option>
+                <option value="15">提前 15 分鐘</option>
+              </select>
+            </div>
           </div>
 
           <div class="field">
-            <div class="label">播放秒數（自動停止）</div>
-            <input id="playSeconds" type="number" min="1" value="10" />
+            <div class="label">播放秒數（ 自動停止 ）</div>
+            <input id="playSeconds" type="number" inputmode="numeric" min="1" value="10" />
           </div>
         </div>
 
@@ -502,55 +685,64 @@
         </div>
       </div>
 
-      <!-- 音效設定 -->
+      <!-- Sound -->
       <div class="card">
         <div class="section-title"><span class="dot"></span>提醒鈴聲</div>
 
         <div class="grid2">
           <div class="field">
             <div class="label">預設鈴聲</div>
-            <select id="preset">
-              <option value="soft">柔和提醒</option>
-              <option value="lively">活潑提醒</option>
-              <option value="urgent">急促提醒</option>
-            </select>
+            <div class="select-wrap">
+              <select id="preset">
+                <option value="soft">柔和提醒</option>
+                <option value="lively">活潑提醒</option>
+                <option value="urgent">急促提醒</option>
+              </select>
+            </div>
           </div>
 
           <div class="field">
-            <div class="label">或上傳自訂音檔</div>
-            <input id="file" type="file" accept="audio/*" />
+            <div class="label">自訂音檔</div>
+            <div class="file-wrap">
+              <label class="file-btn" for="file">選擇檔案</label>
+              <div class="file-name" id="fileName">未選擇</div>
+              <input id="file" type="file" accept="audio/*" />
+            </div>
           </div>
         </div>
 
-        <div class="sound-row" style="margin-top:10px;">
+        <div class="btnrow" style="margin-top:10px;">
           <button class="btn secondary" id="preview" type="button">試聽</button>
           <button class="btn secondary" id="stop" type="button">停止</button>
-          <div class="field" style="flex:1; min-width: 160px;">
-            <div class="label">音量</div>
-            <input id="volume" type="range" min="0" max="1" step="0.01" value="0.7" />
-          </div>
+        </div>
+
+        <div class="field" style="margin-top:10px;">
+          <div class="label">音量</div>
+          <input id="volume" type="range" min="0" max="1" step="0.01" value="0.7" />
         </div>
 
         <div class="mini" style="margin-top:8px;">
-          第一次用時先按一次「試聽」或「開始」，讓瀏覽器允許播放音訊。設定會自動記住。
+          第一次用時先按一次「 試聽 」或「 開始 」，讓瀏覽器允許播放音訊。設定會自動記住。
         </div>
       </div>
 
-      <!-- 計時器列表 -->
+      <!-- Timers -->
       <div class="card">
         <div class="section-title"><span class="dot"></span>計時器</div>
-        <div class="drag-hint">桌機可拖曳排序；手機可用「上移 / 下移」調整順序。</div>
-        <div id="empty" class="empty">還沒有計時段。先新增一個吧。</div>
+        <div class="mini" style="margin-top:-2px; margin-bottom:8px;">
+          桌機可拖曳排序；手機可用上移 / 下移調整順序。
+        </div>
+        <div id="empty" class="empty">還沒有計時器，先新增一個吧！</div>
         <div id="list" class="list"></div>
 
         <div class="footerhint">
-          PWA：用 HTTPS（或 localhost）可安裝並離線使用。
+          PWA：用 HTTPS（ 或 localhost ）可安裝並離線使用。
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Fullscreen / Host overlay -->
+  <!-- Fullscreen overlay -->
   <div class="overlay" id="overlay">
     <div class="overlay-inner">
       <div class="fs-top">
@@ -569,36 +761,58 @@
       <div>
         <div class="fs-actions">
           <button class="btn secondary" id="fsStartPause" type="button">開始 / 暫停</button>
-          <button class="btn secondary" id="fsNext" type="button">下一段</button>
+          <button class="btn secondary" id="fsNextNamed" type="button">下一段</button>
           <button class="btn danger" id="fsReset" type="button">重置</button>
         </div>
 
-        <div class="fs-snooze" id="fsSnooze" style="display:none;">
-          <button class="btn ok" data-snooze="5" type="button">延後 5 分</button>
-          <button class="btn ok" data-snooze="10" type="button">延後 10 分</button>
-          <button class="btn ok" data-snooze="15" type="button">延後 15 分</button>
-        </div>
-
         <div class="mini" style="margin-top:10px; text-align:center;">
-          時間到會顯示延後選項。延後會直接把這一段加回倒數。
+          時間到會自動跳出延後選單。
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Bottom Sheet -->
+  <div class="sheet-backdrop" id="sheetBackdrop"></div>
+  <div class="sheet" id="sheet">
+    <div class="sheet-card">
+      <div class="sheet-handle"></div>
+      <div class="sheet-body">
+        <div class="sheet-title" id="sheetTitle">延後提醒</div>
+        <div class="sheet-desc" id="sheetDesc">選擇要延後的時間</div>
+        <div class="sheet-actions">
+          <button class="btn ok" data-snooze="5" type="button">延後 5 分</button>
+          <button class="btn ok" data-snooze="10" type="button">延後 10 分</button>
+          <button class="btn ok" data-snooze="15" type="button">延後 15 分</button>
+          <button class="btn secondary" id="sheetCancel" type="button">先不要</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mini Player -->
+  <div class="mini-player" id="miniPlayer">
+    <div class="mini-player-card">
+      <div class="mp-left">
+        <div class="mp-title" id="mpTitle">尚未開始</div>
+        <div class="mp-time" id="mpTime">00:00:00</div>
+      </div>
+      <div class="mp-actions">
+        <button class="icon-btn primary" id="mpPlayPause" type="button" aria-label="Play/Pause">▶</button>
+        <button class="icon-btn" id="mpNext" type="button" aria-label="Next">⏭</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // ---------------------------
-    // PWA: register service worker
-    // ---------------------------
+    // PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
       });
     }
 
-    // ---------------------------
     // Helpers
-    // ---------------------------
     const el = (id) => document.getElementById(id);
     const clampInt = (v, min, max) => Math.max(min, Math.min(max, v|0));
     const nowTs = () => Date.now();
@@ -617,24 +831,22 @@
       }[s]));
     }
 
-    // ---------------------------
     // Storage
-    // ---------------------------
-    const STORAGE_KEY = "meeting_timer_pwa_v2";
+    const STORAGE_KEY = "meeting_timer_pwa_v5";
 
     function saveState() {
       const timersArr = state.order.map(id => state.timers[id]).filter(Boolean);
       const data = {
-        version: 2,
+        version: 5,
         nextId: state.nextId,
         order: state.order,
         activeId: state.activeId,
+        lastControlId: state.lastControlId, // NEW
         sound: {
           preset: state.sound.preset,
           volume: state.sound.volume,
           playSeconds: state.sound.playSeconds,
           customName: state.sound.customName || null
-          // 不儲存音檔本身，因為 localStorage 不適合存 blob/base64（太大、很容易爆）。
         },
         timers: timersArr.map(t => ({
           id: t.id,
@@ -646,8 +858,7 @@
           remainingMs: t.remainingMs,
           status: t.status,
           finished: t.finished,
-          prealertTriggered: t.prealertTriggered,
-          // interval/targetTs 不存，重開時會以 remainingMs 呈現「暫停狀態」
+          prealertTriggered: t.prealertTriggered
         }))
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -656,20 +867,14 @@
     function loadState() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return null;
-      try {
-        return JSON.parse(raw);
-      } catch {
-        return null;
-      }
+      try { return JSON.parse(raw); } catch { return null; }
     }
 
-    // ---------------------------
     // Sound presets
-    // ---------------------------
     const PRESET_SOUNDS = {
       soft:   { label: "柔和提醒", url: "https://actions.google.com/sounds/v1/alarms/medium_bell_ringing_near.ogg" },
-      lively: { label: "活潑提醒", url: "https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg" },
-      urgent: { label: "急促提醒", url: "https://actions.google.com/sounds/v1/alarms/beep_short.ogg" }
+      lively: { label: "活潑提醒", url: "https://actions.google.com/sounds/v1/cartoon/jingle_bells.ogg?hl=zh-tw" },
+      urgent: { label: "急促提醒", url: "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg?hl=zh-tw" }
     };
 
     const audio = new Audio(PRESET_SOUNDS.soft.url);
@@ -690,22 +895,30 @@
       stopTimeout = setTimeout(() => stopAudio(), sec * 1000);
     }
 
-    // ---------------------------
-    // App State
-    // ---------------------------
+    // State
     const state = {
       nextId: 1,
       order: [],
-      timers: {},      // id -> timer
-      activeId: null,  // currently "focused" timer (last started / selected)
+      timers: {},
+      activeId: null,
+      lastControlId: null, // NEW: 最後被控制的段落
       sound: {
         preset: "soft",
         volume: 0.7,
         playSeconds: 10,
         customName: null,
-        customUrl: null // session-only
+        customUrl: null
       }
     };
+
+    function computeEndDiff(endStr) {
+      if (!endStr) return -1;
+      const [hh, mm] = endStr.split(':').map(n => parseInt(n,10));
+      const now = new Date();
+      const end = new Date();
+      end.setHours(hh, mm, 0, 0);
+      return end.getTime() - now.getTime();
+    }
 
     function createTimer({name, mode, minutes, endtime, prealertMin}) {
       const id = state.nextId++;
@@ -715,7 +928,7 @@
       return {
         id,
         name,
-        mode,             // 'countdown' | 'endtime'
+        mode,
         minutes: minutes || 0,
         endtime: endtime || "",
         prealertMin: prealertMin || 0,
@@ -728,18 +941,7 @@
       };
     }
 
-    function computeEndDiff(endStr) {
-      if (!endStr) return -1;
-      const [hh, mm] = endStr.split(':').map(n => parseInt(n,10));
-      const now = new Date();
-      const end = new Date();
-      end.setHours(hh, mm, 0, 0);
-      return end.getTime() - now.getTime();
-    }
-
-    // ---------------------------
-    // UI bindings
-    // ---------------------------
+    // UI refs
     const pwaHint = el('pwaHint');
 
     const modeCountdownBtn = el('modeCountdown');
@@ -758,17 +960,18 @@
 
     const presetSelect = el('preset');
     const fileInput = el('file');
+    const fileName = el('fileName');
     const previewBtn = el('preview');
     const stopBtn = el('stop');
     const volumeSlider = el('volume');
 
+    const btnStartPause = el('btnStartPause');
     const btnNext = el('btnNext');
     const btnFullscreen = el('btnFullscreen');
 
     const empty = el('empty');
     const list = el('list');
 
-    // Overlay (fullscreen / host mode)
     const overlay = el('overlay');
     const fsTitle = el('fsTitle');
     const fsSub = el('fsSub');
@@ -776,11 +979,22 @@
     const fsStatus = el('fsStatus');
     const fsExit = el('fsExit');
     const fsStartPause = el('fsStartPause');
-    const fsNext = el('fsNext');
+    const fsNextNamed = el('fsNextNamed');
     const fsReset = el('fsReset');
-    const fsSnooze = el('fsSnooze');
 
-    // Current mode for "add"
+    const sheetBackdrop = el('sheetBackdrop');
+    const sheet = el('sheet');
+    const sheetTitle = el('sheetTitle');
+    const sheetDesc = el('sheetDesc');
+    const sheetCancel = el('sheetCancel');
+
+    const miniPlayer = el('miniPlayer');
+    const mpTitle = el('mpTitle');
+    const mpTime = el('mpTime');
+    const mpPlayPause = el('mpPlayPause');
+    const mpNext = el('mpNext');
+
+    let sheetTimerId = null;
     let currentMode = 'countdown';
 
     function setMode(mode) {
@@ -797,17 +1011,54 @@
         countdownField.style.display = 'none';
       }
     }
-
     modeCountdownBtn.addEventListener('click', () => setMode('countdown'));
     modeEndtimeBtn.addEventListener('click', () => setMode('endtime'));
 
-    // ---------------------------
-    // Render timers
-    // ---------------------------
+    // Running / selection
+    function isRunning(id) {
+      const t = state.timers[id];
+      return !!(t && t.interval);
+    }
+
+    function getRunningId() {
+      for (const id of state.order) {
+        if (isRunning(id)) return id;
+      }
+      return null;
+    }
+
+    // NEW: mini player target = runningId OR lastControlId
+    function getMiniTargetId() {
+      const runningId = getRunningId();
+      if (runningId) return runningId;
+
+      const lc = state.lastControlId;
+      if (lc && state.timers[lc]) return lc;
+
+      // fallback：active
+      if (state.activeId && state.timers[state.activeId]) return state.activeId;
+
+      return null;
+    }
+
+    function setActive(id) {
+      state.activeId = id;
+      for (const tid of state.order) {
+        const card = el(`timer-${tid}`);
+        if (card) card.classList.toggle('active', tid === id);
+      }
+      saveState();
+      if (overlay.classList.contains('show')) syncOverlay();
+      syncQuickControls();
+      syncMiniPlayer();
+    }
+
+    // Render
     function render() {
       list.innerHTML = "";
       if (state.order.length === 0) {
         empty.style.display = "block";
+        syncMiniPlayer();
         return;
       }
       empty.style.display = "none";
@@ -821,7 +1072,8 @@
           : `結束 ${t.endtime}${t.prealertMin>0 ? ` · 提前 ${t.prealertMin} 分鐘` : ''}`;
 
         const card = document.createElement('div');
-        card.className = 'timer' + (state.activeId === id ? ' active' : '');
+        const running = isRunning(id);
+        card.className = 'timer' + (state.activeId === id ? ' active' : '') + (running ? ' running' : '');
         card.id = `timer-${id}`;
         card.draggable = true;
         card.dataset.id = id;
@@ -829,9 +1081,7 @@
         card.innerHTML = `
           <div class="timer-head">
             <div class="tname-wrap">
-              <div class="tname-line">
-                <input class="tname-input" data-name-id="${id}" value="${escapeHtml(t.name)}" />
-              </div>
+              <input class="tname-input" data-name-id="${id}" value="${escapeHtml(t.name)}" />
               <div class="tmeta">${escapeHtml(meta)}</div>
             </div>
             <div class="badge">#${id}</div>
@@ -846,26 +1096,31 @@
             <button class="btn secondary" data-action="start" data-id="${id}" type="button">開始</button>
             <button class="btn secondary" data-action="pause" data-id="${id}" type="button">暫停</button>
             <button class="btn secondary" data-action="reset" data-id="${id}" type="button">重置</button>
-            <button class="btn secondary" data-action="fullscreen" data-id="${id}" type="button">主持人</button>
             <button class="btn danger" data-action="delete" data-id="${id}" type="button">刪除</button>
+          </div>
+
+          <div class="host-row">
+            <button class="btn primary" data-action="fullscreen" data-id="${id}" type="button">全螢幕</button>
+            <button class="btn secondary" data-action="snooze" data-id="${id}" type="button">延後</button>
           </div>
 
           <div class="reorder">
             <button class="btn secondary" data-action="up" data-id="${id}" type="button">上移</button>
             <button class="btn secondary" data-action="down" data-id="${id}" type="button">下移</button>
-            <button class="btn secondary" data-action="snooze" data-id="${id}" type="button">延後</button>
           </div>
         `;
         list.appendChild(card);
       }
 
-      // update overlay if open
       if (overlay.classList.contains('show')) syncOverlay();
+      syncQuickControls();
+      syncMiniPlayer();
     }
 
     function updateCard(id) {
       const t = state.timers[id];
       if (!t) return;
+
       const timeEl = el(`time-${id}`);
       const statusEl = el(`status-${id}`);
       if (timeEl) timeEl.textContent = format(t.remainingMs);
@@ -873,25 +1128,20 @@
 
       const card = el(`timer-${id}`);
       if (card) {
-        if (state.activeId === id) card.classList.add('active');
-        else card.classList.remove('active');
+        const running = isRunning(id);
+        card.classList.toggle('active', state.activeId === id);
+        card.classList.toggle('running', running);
       }
 
       if (overlay.classList.contains('show')) syncOverlay();
+      syncQuickControls();
+      syncMiniPlayer();
     }
 
-    // ---------------------------
     // Timer engine
-    // ---------------------------
-    function setActive(id) {
-      state.activeId = id;
-      // update highlight quickly
-      for (const tid of state.order) {
-        const card = el(`timer-${tid}`);
-        if (card) card.classList.toggle('active', tid === id);
-      }
+    function markControlled(id) {
+      state.lastControlId = id;
       saveState();
-      if (overlay.classList.contains('show')) syncOverlay();
     }
 
     function startTimer(id) {
@@ -899,6 +1149,8 @@
       if (!t || t.interval) return;
 
       setActive(id);
+      markControlled(id);
+
       t.finished = false;
       t.prealertTriggered = false;
 
@@ -939,10 +1191,7 @@
           updateCard(id);
           saveState();
           playAlertSound();
-          // overlay: show snooze panel
-          if (overlay.classList.contains('show') && state.activeId === id) {
-            fsSnooze.style.display = "flex";
-          }
+          openSnoozeSheet(id, true);
           return;
         }
 
@@ -965,6 +1214,7 @@
       clearInterval(t.interval);
       t.interval = null;
       t.status = "已暫停";
+      markControlled(id);
       updateCard(id);
       saveState();
     }
@@ -976,6 +1226,7 @@
       t.prealertTriggered = false;
       t.finished = false;
       t.status = "已重置";
+      markControlled(id);
 
       if (t.mode === 'countdown') {
         t.remainingMs = t.minutes * 60 * 1000;
@@ -986,10 +1237,6 @@
 
       updateCard(id);
       saveState();
-
-      if (overlay.classList.contains('show') && state.activeId === id) {
-        fsSnooze.style.display = "none";
-      }
     }
 
     function deleteTimer(id) {
@@ -999,11 +1246,12 @@
 
       delete state.timers[id];
       state.order = state.order.filter(x => x !== id);
+
       if (state.activeId === id) state.activeId = null;
+      if (state.lastControlId === id) state.lastControlId = null;
 
       render();
       saveState();
-      if (overlay.classList.contains('show')) syncOverlay();
     }
 
     function snoozeTimer(id, minutes) {
@@ -1017,26 +1265,29 @@
 
       const addMs = minutes * 60 * 1000;
       t.remainingMs = Math.max(0, t.remainingMs) + addMs;
-      t.prealertTriggered = true; // 避免 snooze 後又被提前提醒觸發（你若想保留提前提醒可改回 false）
+      t.prealertTriggered = true;
       t.finished = false;
       t.status = `延後 ${minutes} 分鐘`;
+      markControlled(id);
 
       updateCard(id);
       saveState();
 
-      // 直接重新開始倒數（延後的意思通常是再跑）
       startTimer(id);
     }
 
-    // ---------------------------
     // Next segment
-    // ---------------------------
-    function getRunningId() {
-      for (const id of state.order) {
-        const t = state.timers[id];
-        if (t && t.interval) return id;
-      }
-      return null;
+    function getNextId() {
+      if (state.order.length === 0) return null;
+
+      const runningId = getRunningId();
+      let startFromIdx = -1;
+      if (runningId) startFromIdx = state.order.indexOf(runningId);
+      else if (state.activeId) startFromIdx = state.order.indexOf(state.activeId);
+      else if (state.lastControlId) startFromIdx = state.order.indexOf(state.lastControlId);
+
+      const nextIdx = startFromIdx >= 0 ? startFromIdx + 1 : 0;
+      return state.order[nextIdx] ?? state.order[0] ?? null;
     }
 
     function nextSegment() {
@@ -1045,21 +1296,24 @@
       const runningId = getRunningId();
       if (runningId) pauseTimer(runningId);
 
-      let startFromIdx = -1;
-      if (runningId) startFromIdx = state.order.indexOf(runningId);
-      else if (state.activeId) startFromIdx = state.order.indexOf(state.activeId);
+      const nextId = getNextId();
+      if (!nextId) return;
 
-      const nextIdx = startFromIdx >= 0 ? startFromIdx + 1 : 0;
-      const nextId = state.order[nextIdx] ?? state.order[0];
-
-      // 若下一段不存在（到尾端），就回到第一段
       startTimer(nextId);
       setActive(nextId);
+      markControlled(nextId);
     }
 
-    // ---------------------------
-    // Reorder helpers (mobile-friendly up/down + desktop drag)
-    // ---------------------------
+    function updateNextNamedButton() {
+      const nextId = getNextId();
+      if (!nextId || !state.timers[nextId]) {
+        fsNextNamed.textContent = "下一段";
+        return;
+      }
+      fsNextNamed.textContent = `下一段：${state.timers[nextId].name}`;
+    }
+
+    // Reorder
     function moveUp(id) {
       const idx = state.order.indexOf(id);
       if (idx <= 0) return;
@@ -1080,29 +1334,19 @@
       saveState();
     }
 
-    // Drag & drop (works on desktop + some mobile browsers)
     let dragSrcId = null;
-
     list.addEventListener('dragstart', (e) => {
       const card = e.target.closest('.timer');
       if (!card) return;
       dragSrcId = parseInt(card.dataset.id, 10);
-      card.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
       try { e.dataTransfer.setData('text/plain', String(dragSrcId)); } catch {}
     });
-
-    list.addEventListener('dragend', (e) => {
-      const card = e.target.closest('.timer');
-      if (card) card.classList.remove('dragging');
-    });
-
     list.addEventListener('dragover', (e) => {
       if (!dragSrcId) return;
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
     });
-
     list.addEventListener('drop', (e) => {
       e.preventDefault();
       const dstCard = e.target.closest('.timer');
@@ -1123,28 +1367,22 @@
       saveState();
     });
 
-    // ---------------------------
-    // Overlay / Host mode (fullscreen)
-    // ---------------------------
+    // Fullscreen
     function openHostMode(forId=null) {
       if (forId) setActive(forId);
       overlay.classList.add('show');
       syncOverlay();
-
-      // Try Fullscreen API (may fail on iOS)
       const root = document.documentElement;
-      if (root.requestFullscreen) {
-        root.requestFullscreen().catch(() => {});
-      }
+      if (root.requestFullscreen) root.requestFullscreen().catch(() => {});
+      syncMiniPlayer();
     }
 
     function closeHostMode() {
       overlay.classList.remove('show');
-      fsSnooze.style.display = "none";
-
       if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen().catch(() => {});
       }
+      syncMiniPlayer();
     }
 
     function syncOverlay() {
@@ -1154,7 +1392,7 @@
         fsSub.textContent = "選一段開始計時";
         fsTime.textContent = "00:00:00";
         fsStatus.textContent = "尚未開始";
-        fsSnooze.style.display = "none";
+        updateNextNamedButton();
         return;
       }
 
@@ -1166,46 +1404,116 @@
 
       fsTime.textContent = format(t.remainingMs);
       fsStatus.textContent = t.status;
-
-      fsSnooze.style.display = t.finished ? "flex" : "none";
+      updateNextNamedButton();
     }
 
-    // overlay buttons
-    fsExit.addEventListener('click', () => closeHostMode());
-    fsNext.addEventListener('click', () => nextSegment());
-    fsReset.addEventListener('click', () => {
+    el('fsExit').addEventListener('click', () => closeHostMode());
+    el('fsNextNamed').addEventListener('click', () => nextSegment());
+    el('fsReset').addEventListener('click', () => {
       if (!state.activeId) return;
       resetTimer(state.activeId);
-      fsSnooze.style.display = "none";
     });
-
-    fsStartPause.addEventListener('click', () => {
-      const id = state.activeId;
+    el('fsStartPause').addEventListener('click', () => {
+      const id = pickControlId();
       if (!id) return;
-      const t = state.timers[id];
-      if (!t) return;
-      if (t.interval) pauseTimer(id);
+      if (isRunning(id)) pauseTimer(id);
       else startTimer(id);
     });
 
-    fsSnooze.addEventListener('click', (e) => {
+    // Bottom sheet
+    function openSnoozeSheet(id, auto=false) {
+      const t = state.timers[id];
+      if (!t) return;
+      sheetTimerId = id;
+      sheetTitle.textContent = auto ? "時間到！要延後嗎？" : "延後提醒";
+      sheetDesc.textContent = `段落：${t.name}。選擇要延後的時間。`;
+      sheetBackdrop.classList.add('show');
+      sheet.classList.add('show');
+    }
+    function closeSnoozeSheet() {
+      sheetTimerId = null;
+      sheetBackdrop.classList.remove('show');
+      sheet.classList.remove('show');
+    }
+    sheetBackdrop.addEventListener('click', closeSnoozeSheet);
+    sheetCancel.addEventListener('click', closeSnoozeSheet);
+    sheet.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-snooze]');
       if (!btn) return;
       const mins = parseInt(btn.dataset.snooze, 10);
-      if (!state.activeId) return;
-      snoozeTimer(state.activeId, mins);
-      fsSnooze.style.display = "none";
+      const id = sheetTimerId;
+      if (!id) return;
+      closeSnoozeSheet();
+      snoozeTimer(id, mins);
     });
 
-    // ---------------------------
-    // Global buttons
-    // ---------------------------
+    // Quick controls
+    function pickControlId() {
+      const runningId = getRunningId();
+      if (runningId) return runningId;
+      if (state.activeId) return state.activeId;
+      if (state.lastControlId) return state.lastControlId;
+      return null;
+    }
+
+    function syncQuickControls() {
+      const id = pickControlId();
+      if (!id || !state.timers[id]) {
+        btnStartPause.textContent = "開始 / 暫停";
+        return;
+      }
+      btnStartPause.textContent = isRunning(id) ? "暫停" : "開始";
+    }
+
+    btnStartPause.addEventListener('click', () => {
+      const id = pickControlId();
+      if (!id) return;
+      if (isRunning(id)) pauseTimer(id);
+      else startTimer(id);
+    });
     btnNext.addEventListener('click', () => nextSegment());
     btnFullscreen.addEventListener('click', () => openHostMode(state.activeId));
 
-    // ---------------------------
-    // List actions + name editing
-    // ---------------------------
+    // NEW: Mini player (show on running OR lastControl)
+    function syncMiniPlayer() {
+      if (overlay.classList.contains('show')) {
+        miniPlayer.classList.remove('show');
+        return;
+      }
+
+      const id = getMiniTargetId();
+      if (!id || !state.timers[id]) {
+        miniPlayer.classList.remove('show');
+        return;
+      }
+
+      const t = state.timers[id];
+      mpTitle.textContent = t.name;
+      mpTime.textContent = format(t.remainingMs);
+
+      // icon switch: running -> pause, paused -> play
+      mpPlayPause.textContent = isRunning(id) ? "❚❚" : "▶";
+
+      miniPlayer.classList.add('show');
+    }
+
+    mpPlayPause.addEventListener('click', () => {
+      const id = getMiniTargetId();
+      if (!id || !state.timers[id]) return;
+
+      if (isRunning(id)) pauseTimer(id);
+      else startTimer(id);
+
+      markControlled(id);
+      syncMiniPlayer();
+    });
+
+    mpNext.addEventListener('click', () => {
+      nextSegment();
+      syncMiniPlayer();
+    });
+
+    // List actions + rename
     list.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-action]');
       if (!btn) return;
@@ -1214,29 +1522,23 @@
       const id = parseInt(btn.dataset.id, 10);
       if (!id) return;
 
+      setActive(id);
+      markControlled(id);
+
       if (action === 'start') startTimer(id);
       if (action === 'pause') pauseTimer(id);
       if (action === 'reset') resetTimer(id);
       if (action === 'delete') deleteTimer(id);
+      if (action === 'fullscreen') openHostMode(id);
+      if (action === 'snooze') openSnoozeSheet(id, false);
       if (action === 'up') moveUp(id);
       if (action === 'down') moveDown(id);
-      if (action === 'fullscreen') openHostMode(id);
-
-      if (action === 'snooze') {
-        // Quick snooze menu: if finished -> show 5/10/15 via prompt-like choice
-        // We'll just cycle 5 -> 10 -> 15 by default for quick button, or use overlay for clear choices.
-        // Here: always snooze 5 min (simple + fast)
-        snoozeTimer(id, 5);
-      }
     });
 
-    // name editing: update on blur + Enter
     list.addEventListener('keydown', (e) => {
       const input = e.target.closest('input[data-name-id]');
       if (!input) return;
-      if (e.key === 'Enter') {
-        input.blur();
-      }
+      if (e.key === 'Enter') input.blur();
     });
 
     list.addEventListener('input', (e) => {
@@ -1245,48 +1547,37 @@
       const id = parseInt(input.dataset.nameId, 10);
       const t = state.timers[id];
       if (!t) return;
-      t.name = input.value.slice(0, 60); // avoid insanely long
-      if (state.activeId === id && overlay.classList.contains('show')) syncOverlay();
+      t.name = input.value.slice(0, 60);
       saveState();
+      if (overlay.classList.contains('show') && state.activeId === id) syncOverlay();
+      updateNextNamedButton();
+      syncMiniPlayer();
     });
 
-    // ---------------------------
-    // Add timer / clear all
-    // ---------------------------
+    // Add / clear
     addBtn.addEventListener('click', () => {
       const name = (nameInput.value || "").trim() || "未命名段落";
       const prealertMin = parseInt(prealertSelect.value || "0", 10);
 
       const playSec = clampInt(parseInt(playSecondsInput.value || "10", 10), 1, 600);
-      state.sound.playSeconds = playSec; // treat as global for simplicity
-      saveState();
+      state.sound.playSeconds = playSec;
 
       if (currentMode === 'countdown') {
         const minutes = parseInt(minutesInput.value || "0", 10);
         if (!minutes || minutes <= 0) return;
-        const t = createTimer({
-          name,
-          mode: 'countdown',
-          minutes,
-          endtime: '',
-          prealertMin
-        });
+        const t = createTimer({ name, mode: 'countdown', minutes, endtime: '', prealertMin });
         state.timers[t.id] = t;
         state.order.push(t.id);
         setActive(t.id);
+        markControlled(t.id);
       } else {
         const endtime = endtimeInput.value;
         if (!endtime) return;
-        const t = createTimer({
-          name,
-          mode: 'endtime',
-          minutes: 0,
-          endtime,
-          prealertMin
-        });
+        const t = createTimer({ name, mode: 'endtime', minutes: 0, endtime, prealertMin });
         state.timers[t.id] = t;
         state.order.push(t.id);
         setActive(t.id);
+        markControlled(t.id);
       }
 
       nameInput.value = "";
@@ -1295,7 +1586,6 @@
     });
 
     clearAllBtn.addEventListener('click', () => {
-      // stop all running intervals
       for (const id of state.order) {
         const t = state.timers[id];
         if (t?.interval) clearInterval(t.interval);
@@ -1303,13 +1593,13 @@
       state.order = [];
       state.timers = {};
       state.activeId = null;
+      state.lastControlId = null;
+      closeSnoozeSheet();
       render();
       saveState();
     });
 
-    // ---------------------------
-    // Sound controls (remember settings)
-    // ---------------------------
+    // Sound controls
     presetSelect.addEventListener('change', () => {
       const key = presetSelect.value;
       if (PRESET_SOUNDS[key]) {
@@ -1319,6 +1609,7 @@
 
         audio.src = PRESET_SOUNDS[key].url;
         fileInput.value = "";
+        fileName.textContent = "未選擇";
 
         saveState();
       }
@@ -1328,10 +1619,10 @@
       const file = e.target.files?.[0];
       if (!file) return;
       const url = URL.createObjectURL(file);
-      state.sound.customUrl = url; // session-only
+      state.sound.customUrl = url;
       state.sound.customName = file.name || "custom-audio";
-
       audio.src = url;
+      fileName.textContent = state.sound.customName;
       saveState();
     });
 
@@ -1351,21 +1642,19 @@
     previewBtn.addEventListener('click', () => playAlertSound());
     stopBtn.addEventListener('click', () => stopAudio());
 
-    // ---------------------------
-    // Restore state
-    // ---------------------------
+    // Restore
     function hydrateFromStorage(data) {
       state.nextId = data.nextId || 1;
       state.order = Array.isArray(data.order) ? data.order : [];
       state.activeId = data.activeId ?? null;
+      state.lastControlId = data.lastControlId ?? null;
 
-      // sound
       const s = data.sound || {};
       state.sound.preset = s.preset || "soft";
       state.sound.volume = typeof s.volume === "number" ? s.volume : 0.7;
       state.sound.playSeconds = clampInt(parseInt(s.playSeconds || 10, 10), 1, 600);
       state.sound.customName = s.customName || null;
-      state.sound.customUrl = null; // can't restore blob
+      state.sound.customUrl = null;
 
       presetSelect.value = state.sound.preset;
       volumeSlider.value = String(state.sound.volume);
@@ -1374,7 +1663,8 @@
       audio.volume = state.sound.volume;
       audio.src = PRESET_SOUNDS[state.sound.preset]?.url || PRESET_SOUNDS.soft.url;
 
-      // timers
+      fileName.textContent = state.sound.customName ? `${state.sound.customName}（重開需重選）` : "未選擇";
+
       state.timers = {};
       const timersList = Array.isArray(data.timers) ? data.timers : [];
       for (const t of timersList) {
@@ -1395,23 +1685,17 @@
         };
       }
 
-      // clean order (remove missing)
       state.order = state.order.filter(id => !!state.timers[id]);
-      // if active missing -> null
       if (state.activeId && !state.timers[state.activeId]) state.activeId = null;
+      if (state.lastControlId && !state.timers[state.lastControlId]) state.lastControlId = null;
     }
 
-    // ---------------------------
-    // Initialize
-    // ---------------------------
+    // Init
     (function init(){
       const saved = loadState();
       if (saved) hydrateFromStorage(saved);
 
-      // default mode UI
       setMode('countdown');
-
-      // show PWA hint
       pwaHint.textContent = "PWA 可安裝";
 
       render();
